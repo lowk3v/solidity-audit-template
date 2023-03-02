@@ -1,0 +1,35 @@
+# Secrets
+*.txt
+.idea
+.secret
+tenderly.yaml
+
+# yarn / eslint
+.yarn/cache
+.yarn/install-state.gz
+.yarn/build-state.yml
+.eslintcache
+coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+**/node_modules
+yarn.lock
+
+# production
+build
+
+# Hardhat files
+typechain-types/
+cache*
+artifacts*
+deployments
+**/data
+
+# Foundry
+cache/
+out/
+
+# misc
+.DS_Store
+.env*

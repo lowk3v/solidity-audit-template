@@ -7,7 +7,6 @@ import "chalk";
 import "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
 
-import example from "./tasks/example";
 import wallet from "./tasks/wallet";
 import fundedwallet from "./tasks/fundedwallet";
 import generate from "./tasks/generate";
@@ -35,7 +34,7 @@ import "@nomicfoundation/hardhat-toolbox";
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "localhost";
+const defaultNetwork = "hardhat";
 
 const mainnetGwei = 21;
 
@@ -72,6 +71,9 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: "0.5.16"
+      }
     ],
   },
 
@@ -83,29 +85,9 @@ const config: HardhatUserConfig = {
   // Follow the directions, and uncomment the network you wish to deploy to.
 
   networks: {
-    localhost: {
-      url: "http://localhost:8545",
-      /*      
-        notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
-        (you can put in a mnemonic here to set the deployer locally)
-      
-      */
-    },
-    rinkeby: {
-      url: "https://rinkeby.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/rinkeby", // <---- YOUR MORALIS ID! (not limited to infura)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    kovan: {
-      url: "https://kovan.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/kovan", // <---- YOUR MORALIS ID! (not limited to infura)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    mainnet: {
+    hardhat: {},
+
+    eth: {
       url: "https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
       //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
       gasPrice: mainnetGwei * 1000000000,
@@ -113,36 +95,17 @@ const config: HardhatUserConfig = {
         mnemonic: mnemonic(),
       },
     },
-    ropsten: {
-      url: "https://ropsten.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/ropsten",// <---- YOUR MORALIS ID! (not limited to infura)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    goerli: {
-      url: "https://goerli.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/goerli", // <---- YOUR MORALIS ID! (not limited to infura)
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    xdai: {
-      url: "https://rpc.xdaichain.com/",
+    bsc: {
+      url: "https://bsc-dataseed.binance.org/",
+      chainId: 56,
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
+
     fantom: {
       url: "https://rpcapi.fantom.network",
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    testnetFantom: {
-      url: "https://rpc.testnet.fantom.network",
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),
@@ -156,126 +119,175 @@ const config: HardhatUserConfig = {
         mnemonic: mnemonic(),
       },
     },
-    mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      // url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/polygon/mumbai", // <---- YOUR MORALIS ID! (not limited to infura)
-      gasPrice: 3200000000,
+    bsctestnet: {
+      url: "https://data-seed-prebsc-2-s3.binance.org:8545/",
+      chainId: 97,
       accounts: {
         mnemonic: mnemonic(),
       },
     },
-    matic: {
-      url: "https://rpc-mainnet.maticvigil.com/",
-      gasPrice: 1000000000,
+    rinkeby: {
+      url: "https://rinkeby.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+      //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/rinkeby", // <---- YOUR MORALIS ID! (not limited to infura)
       accounts: {
         mnemonic: mnemonic(),
       },
     },
-    optimism: {
-      url: "https://mainnet.optimism.io",
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l1: "mainnet",
-      },
-    },
-    kovanOptimism: {
-      url: "https://kovan.optimism.io",
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l1: "kovan",
-      },
-    },
-    localOptimism: {
-      url: "http://localhost:8545",
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l1: "localOptimismL1",
-      },
-    },
-    localOptimismL1: {
-      url: "http://localhost:9545",
-      gasPrice: 0,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l2: "localOptimism",
-      },
-    },
-    localAvalanche: {
-      url: "http://localhost:9650/ext/bc/C/rpc",
-      gasPrice: 225000000000,
-      chainId: 43112,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    fujiAvalanche: {
-      url: "https://api.avax-test.network/ext/bc/C/rpc",
-      gasPrice: 225000000000,
-      chainId: 43113,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    mainnetAvalanche: {
-      url: "https://api.avax.network/ext/bc/C/rpc",
-      gasPrice: 225000000000,
-      chainId: 43114,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    testnetHarmony: {
-      url: "https://api.s0.b.hmny.io",
-      gasPrice: 1000000000,
-      chainId: 1666700000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    mainnetHarmony: {
-      url: "https://api.harmony.one",
-      gasPrice: 1000000000,
-      chainId: 1666600000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    moonbeam: {
-      url: 'https://rpc.api.moonbeam.network',
-      chainId: 1284,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    moonriver: {
-      url: 'https://rpc.api.moonriver.moonbeam.network',
-      chainId: 1285,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    moonbaseAlpha: {
-      url: 'https://rpc.api.moonbase.moonbeam.network',
-      chainId: 1287,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    },
-    moonbeamDevNode: {
-      url: 'http://127.0.0.1:9933',
-      chainId: 1281,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-    }
+    // kovan: {
+    //   url: "https://kovan.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+    //   //    url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/eth/kovan", // <---- YOUR MORALIS ID! (not limited to infura)
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // ropsten: {
+    //   url: "https://ropsten.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+    //   //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/ropsten",// <---- YOUR MORALIS ID! (not limited to infura)
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // goerli: {
+    //   url: "https://goerli.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad", // <---- YOUR INFURA ID! (or it won't work)
+    //   //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/goerli", // <---- YOUR MORALIS ID! (not limited to infura)
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // xdai: {
+    //   url: "https://rpc.xdaichain.com/",
+    //   gasPrice: 1000000000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // testnetFantom: {
+    //   url: "https://rpc.testnet.fantom.network",
+    //   gasPrice: 1000000000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // mumbai: {
+    //   url: "https://rpc-mumbai.maticvigil.com",
+    //   // url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXX/polygon/mumbai", // <---- YOUR MORALIS ID! (not limited to infura)
+    //   gasPrice: 3200000000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // matic: {
+    //   url: "https://rpc-mainnet.maticvigil.com/",
+    //   gasPrice: 1000000000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // optimism: {
+    //   url: "https://mainnet.optimism.io",
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    //   companionNetworks: {
+    //     l1: "mainnet",
+    //   },
+    // },
+    // kovanOptimism: {
+    //   url: "https://kovan.optimism.io",
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    //   companionNetworks: {
+    //     l1: "kovan",
+    //   },
+    // },
+    // localOptimism: {
+    //   url: "http://localhost:8545",
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    //   companionNetworks: {
+    //     l1: "localOptimismL1",
+    //   },
+    // },
+    // localOptimismL1: {
+    //   url: "http://localhost:9545",
+    //   gasPrice: 0,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    //   companionNetworks: {
+    //     l2: "localOptimism",
+    //   },
+    // },
+    // localAvalanche: {
+    //   url: "http://localhost:9650/ext/bc/C/rpc",
+    //   gasPrice: 225000000000,
+    //   chainId: 43112,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // fujiAvalanche: {
+    //   url: "https://api.avax-test.network/ext/bc/C/rpc",
+    //   gasPrice: 225000000000,
+    //   chainId: 43113,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // mainnetAvalanche: {
+    //   url: "https://api.avax.network/ext/bc/C/rpc",
+    //   gasPrice: 225000000000,
+    //   chainId: 43114,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // testnetHarmony: {
+    //   url: "https://api.s0.b.hmny.io",
+    //   gasPrice: 1000000000,
+    //   chainId: 1666700000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // mainnetHarmony: {
+    //   url: "https://api.harmony.one",
+    //   gasPrice: 1000000000,
+    //   chainId: 1666600000,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // moonbeam: {
+    //   url: 'https://rpc.api.moonbeam.network',
+    //   chainId: 1284,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // moonriver: {
+    //   url: 'https://rpc.api.moonriver.moonbeam.network',
+    //   chainId: 1285,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // moonbaseAlpha: {
+    //   url: 'https://rpc.api.moonbase.moonbeam.network',
+    //   chainId: 1287,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // },
+    // moonbeamDevNode: {
+    //   url: 'http://127.0.0.1:9933',
+    //   chainId: 1281,
+    //   accounts: {
+    //     mnemonic: mnemonic(),
+    //   },
+    // }
   },
 
   ovm: {
@@ -320,11 +332,10 @@ export default config;
 
 // TASKS
 task("getPair", "Get pair of tokens")
-  .addParam("token0", "Address of token0")
-  .addParam("token1", "Address of token1")
+  .addParam("t0", "Address of token0")
+  .addParam("t1", "Address of token1")
   .setAction(pair);
   
-task("example", "Example task").setAction(example);
 task("wallet", "Create a wallet (pk) link").setAction(wallet);
 task("fundedwallet", "Create a wallet (pk) link and fund it with deployer?")
   .addOptionalParam(
@@ -337,17 +348,16 @@ task( "generate",
   "Create a mnemonic for builder deploys",
 ).setAction(generate);
 
-task(
-  "mineContractAddress",
+task("mineContractAddress",
   "Looks for a deployer account that will give leading zeros"
 ).addParam("searchFor", "String to search for")
   .setAction(mineContractAddress);
 
-task(
-    "account",
-    "Get balance informations for the deployment account.",
-    account(config.networks)
-  )
+task("account",
+    "Get balance informations for the deployment account."
+  ).setAction(async() => {    
+    await account(config.networks);
+  });
 
 task("send", "Send ETH")
   .addParam("from", "From address or account index")

@@ -1,7 +1,7 @@
 import { utils } from "ethers";
 import * as fs from "fs";
 
-export const DEBUG = false;
+export const DEBUG = true;
 const { isAddress, getAddress } = utils;
 
 export default function debug(text: string) {

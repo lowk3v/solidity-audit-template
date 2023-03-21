@@ -331,10 +331,10 @@ const config: HardhatUserConfig = {
 export default config;
 
 // TASKS
-task("getPair", "Get pair of tokens")
-  .addParam("t0", "Address of token0")
-  .addParam("t1", "Address of token1")
-  .setAction(pair);
+// task("getPair", "Get pair of tokens")
+//   .addParam("t0", "Address of token0")
+//   .addParam("t1", "Address of token1")
+//   .setAction(pair);
   
 task("wallet", "Create a wallet (pk) link").setAction(wallet);
 task("fundedwallet", "Create a wallet (pk) link and fund it with deployer?")

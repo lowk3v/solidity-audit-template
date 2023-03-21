@@ -1,5 +1,4 @@
 import debug, { send, addr } from "../hardhat.utils";
-import utils from "ethers";
 
 const sendTask = async (taskArgs: any, { network, ethers }) => {
     const from = await addr(ethers, taskArgs.from);
